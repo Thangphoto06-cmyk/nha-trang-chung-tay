@@ -26,7 +26,13 @@ button{background:#111;color:#fff;font-weight:bold;border:0}
 <div class="box" id="adminBox" style="display:none">
 <h2>Sửa số điện thoại</h2>
 <p>Đổi số xong bấm Lưu là web tự đổi.</p>
-<div id="list"></div>
+<div id="list"></div> <div style="border-top:1px solid #ddd;margin-top:16px;padding-top:12px">
+<h3>Thêm số mới</h3>
+<input id="newName" placeholder="Tên bệnh viện / đơn vị, VD: BV Da Liễu">
+<input id="newPhone" placeholder="Số điện thoại, VD: 0258 123 456">
+<button onclick="addPhone()">+ Thêm số mới</button>
+</div>
+  
 <button onclick="logout()">Đăng xuất</button>
 </div>
 
@@ -35,7 +41,17 @@ const SUPABASE_URL = "https://bpgimzfgdfiugmwvorlx.supabase.co";
 const SUPABASE_KEY =  "sb_publishable_...";
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-async function login(){
+async function login(){ async function addPhone(){
+  const name = document.getElementById('newName').value.trim();
+  const phone = document.getElementById('newPhone').value.trim();
+  if(!name || !phone){ alert("Bạn chưa nhập đủ tên và số!"); return; }
+  const { error } = await supabaseClient.from('phone_numbers').insert([{ name: name, phone: phone }]);
+  if(error){ alert("Lỗi: " + error.message); return; }
+  document.getElementById('newName').value = "";
+  document.getElementById('newPhone').value = "";
+  alert("Đã thêm xong!");
+  loadPhones();
+}
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
   const { error } = await supabase.auth.signInWithPassword({email, password});
