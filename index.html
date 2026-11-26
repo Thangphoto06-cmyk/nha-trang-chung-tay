@@ -34,7 +34,21 @@ footer{background:#111;color:#fff;border-radius:18px;padding:18px;margin-top:16p
 body.large{font-size:18px}body.large .hero h1{font-size:34px}body.large p,body.large li{font-size:18px}
 </style>
 </head>
-<body>
+<body> <div id="phoneList"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://bpgimzfgdfiugmwworlx.supabase.co";
+const SUPABASE_KEY = "DÁN_KEY_ĐẦY_ĐỦ_VÔ_ĐÂY";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+async function showPhones(){
+  const { data } = await sb.from('phone_numbers').select('*').order('id');
+  if(!data) return;
+  document.getElementById('phoneList').innerHTML = data.map(r => 
+    `<div style="background:#fff;padding:12px;margin:8px;border-radius:10px"><b>${r.name}</b><br><a href="tel:${r.phone}">${r.phone}</a></div>`
+  ).join('');
+}
+showPhones();
+</script>
 <div class="topbar">🚨 CẦN GIÚP GẤP? Gọi ngay: <a href="tel:115">115</a> • <a href="tel:113">113</a> • <a href="tel:114">114</a><small>Admin Quốc Thắng: <a href="tel:0385208227">0385208227</a> • Bấm là gọi được ngay</small></div>
 <header><div class="head"><div class="logo">NHA TRANG <span>CHUNG TAY</span></div><div style="display:flex;gap:8px"><button class="btn btn-teal" onclick="toast('Đăng nhập để đăng bài và theo dõi bài của bạn')">Đăng nhập</button><a href="tel:0385208227" style="text-decoration:none"><button class="btn btn-black">Gọi Admin</button></a></div></div></header>
 <div class="wrap">
