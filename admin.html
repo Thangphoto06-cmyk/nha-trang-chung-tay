@@ -14,7 +14,21 @@ button{background:#111;color:#fff;font-weight:bold;border:0}
 .row input{flex:1}
 </style>
 </head>
-<body>
+<body> <div id="phoneList"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://bpgimzfgdfiugmwworlx.supabase.co";
+const SUPABASE_KEY = "DÁN_KEY_ĐẦY_ĐỦ_VÔ_ĐÂY";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+async function showPhones(){
+  const { data } = await sb.from('phone_numbers').select('*').order('id');
+  if(!data) return;
+  document.getElementById('phoneList').innerHTML = data.map(r => 
+    `<div style="background:#fff;padding:12px;margin:8px;border-radius:10px"><b>${r.name}</b><br><a href="tel:${r.phone}">${r.phone}</a></div>`
+  ).join('');
+}
+showPhones();
+</script>
 <div class="box" id="loginBox">
 <h2>Đăng nhập Admin</h2>
 <input id="email" placeholder="Email Admin">
